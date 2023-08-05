@@ -18,8 +18,6 @@ async function transformer(svg, config = {}) {
     attributes: { width, height },
     defaultFillColor,
   } = transformed;
-  console.log('🚀 ~ file: index.js:21 ~ transformer ~ height:', height);
-  console.log('🚀 ~ file: index.js:21 ~ transformer ~ width:', width);
   const morphed = stringify(transformed);
   const formatted = format(morphed, config, {
     defaultFillColor,
