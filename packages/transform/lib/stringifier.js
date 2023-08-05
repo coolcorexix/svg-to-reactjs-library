@@ -26,12 +26,23 @@ function stringifyStyle(style = {}) {
  * @param {Object=} attributes Node attributes.
  * @returns {string}
  */
-function stringifyAttributes(attributes = {}) {
+function stringifyAttributes(attributes = {}, nodeName = '') {
   const attributeNames = Object.keys(attributes);
 
   return attributeNames.reduce((accumulator, attributeName) => {
     const attribute = attributes[attributeName];
     const isStyleAttribute = isPlainObject(attribute);
+    if (attributeName === 'fill') {
+      return accumulator + ` fill={color}`;
+    }
+    
+    if (attributeName === 'width' &&  nodeName === 'svg' ) {
+      return accumulator + ` width={width}`;
+    }
+
+    if (attributeName === 'height'  &&  nodeName === 'svg') {
+      return accumulator + ` height={height}`;
+    }
 
     if (isStyleAttribute) {
       return accumulator + ` ${attributeName}={{ ${stringifyStyle(attribute)} }}`;
@@ -51,7 +62,7 @@ function stringify(node) {
     return node;
   }
 
-  const attributes = stringifyAttributes(node.attributes);
+  const attributes = stringifyAttributes(node.attributes, node.name);
   const buffer = `<${node.name}${attributes}>`;
 
   const childrensBuffer = node.children.reduce((accumulator, childrenNode) => {

@@ -12,7 +12,8 @@
   },
   "workspaces": [
     "packages/app",
-    "packages/transform"
+    "packages/transform",
+    "packages/cli"
   ],
   "scripts": {
     "test": "jest test/unit/",

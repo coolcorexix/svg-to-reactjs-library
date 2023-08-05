@@ -21,7 +21,7 @@ const TEMPLATES = {
   functional: `
     import React from "react";
     
-    function Icon() {
+    function Icon(<%= customProps %>) {
       return <%= svg %>;
     }
 
@@ -35,7 +35,7 @@ const TEMPLATES = {
  * @param {string="functional","class"} config.type Desired component type.
  * @return {string}
  */
-function reactify(svg, { type = 'functional', memo }) {
+function reactify(svg, { type = 'functional', memo }, customProps) {
   const data = {
     parentComponent: memo ? `React.PureComponent` : `React.Component`,
     exportComponent: memo ? `React.memo(Icon)` : `Icon`,
@@ -44,6 +44,7 @@ function reactify(svg, { type = 'functional', memo }) {
   const compile = template(TEMPLATES[type]);
   const component = compile({
     ...data,
+    customProps: `{ color="${customProps.defaultFillColor}", width = ${customProps.defaultSize.width}, height = ${customProps.defaultSize.height} }`,
     svg,
   });
 
@@ -56,8 +57,8 @@ function reactify(svg, { type = 'functional', memo }) {
  * @param {Object=} config Component type, SVGO and Prettier config.
  * @return {string}
  */
-function format(svg, config) {
-  const component = reactify(svg, config);
+function format(svg, config, customProps) {
+  const component = reactify(svg, config, customProps);
   const formatted = prettier.format(component, {
     ...config,
     parser: 'babel',

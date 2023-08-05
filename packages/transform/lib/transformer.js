@@ -24,6 +24,14 @@ function transformStyle(style) {
 
   return transformed;
 }
+const hexColorRegex = /^#([0-9a-fA-F]{3}){1,2}$/;
+
+function outmostTransform(node) {
+  const transformedNode = transform(node);
+  console.log('in the outmost: ', transformedNode.defaultFillColor);
+  // console.log('in the outmost 2: ', transformedNode.defaultFillColor);
+  return transformedNode;
+}
 
 /**
  * Apply transforms to SVG tree.
@@ -31,6 +39,7 @@ function transformStyle(style) {
  * @returns {string}
  */
 function transform(node) {
+  let defaultFillColor;
   if (isString(node)) {
     return node;
   }
@@ -39,6 +48,10 @@ function transform(node) {
 
   const attributes = attributeNames.reduce((accumulator, attributeName) => {
     const attribute = node.attributes[attributeName];
+
+    if (!defaultFillColor && attributeName === 'fill' && hexColorRegex.test(attribute)) {
+      defaultFillColor = attribute;
+    }
 
     const isStyleAttribute = attributeName === 'style';
     const isDataAttribute = attributeName.startsWith('data-');
@@ -67,13 +80,20 @@ function transform(node) {
     };
   }, {});
 
-  const children = node.children.map(transform);
-
+  const children = node.children.map((childNode) => {
+    const childNodeTransformed = transform(childNode);
+    if (!defaultFillColor && childNodeTransformed.defaultFillColor) {
+      defaultFillColor = childNodeTransformed.defaultFillColor;
+    }
+    return childNodeTransformed;
+  });
+  // console.log("🚀 ~ file: transformer.js:89 ~ transform ~ defaultFillColor:", node.name, defaultFillColor)
   return {
     ...node,
     children,
     attributes,
+    defaultFillColor,
   };
 }
 
-module.exports = transform;
+module.exports = outmostTransform;
