@@ -12,17 +12,17 @@ function toTitleCase(str) {
 cli
   .command('convert-svg-bulk <folderPath>', 'Convert all SVG files in a folder to PNG')
   .option('--outDir <outputFolder>', 'Specify the output folder path')
-  .action((folderPath, options) => {
+  .action(async (folderPath, options) => {
     folderPath = path.resolve(folderPath);
     console.log(`Listing all SVG files in folder: ${folderPath}`);
 
-    const outputFolder = options.output ? path.resolve(options.output) : path.join(process.cwd(), 'jsx');
+    const outputFolder = options.output ? path.resolve(options.output) : path.join(process.cwd(), 'svg2jsx-icons');
 
     if (!fs.existsSync(outputFolder)) {
       fs.mkdirSync(outputFolder, { recursive: true });
     }
 
-    fs.readdir(folderPath, (err, files) => {
+    fs.readdir(folderPath, async (err, files) => {
       if (err) {
         console.error('Error occurred while reading the folder:', err);
         return;
@@ -36,7 +36,9 @@ cli
       }
 
       console.log('Found SVG files:');
-      svgFileNames.forEach(async (fileName) => {
+      const plainTextSourceCode = {};
+      const iconComponents = [];
+      for (const fileName of svgFileNames) {
         const svgContent = fs.readFileSync(path.join(folderPath, fileName), 'utf8');
         const jsx = await transform(svgContent);
         const baseNameWithoutExtension = path.basename(fileName, '.svg');
@@ -45,7 +47,23 @@ cli
         const outputFileName = path.join(outputFolder, `${titleCaseFileName}.jsx`);
         fs.writeFileSync(outputFileName, jsx);
         console.log(`Converted and saved to: ${outputFileName}`);
-      });
+
+        plainTextSourceCode[titleCaseFileName] = jsx;
+
+        // Store the icon component name in the barrel file
+        iconComponents.push(titleCaseFileName);
+      }
+
+      // Generate the index file (barrel file) with lazy imports
+      const indexFileContent = iconComponents
+        .map((componentName) => `export { default as ${componentName} } from './${componentName}';`)
+        .join('\n');
+
+      const indexFilePath = path.join(outputFolder, 'index.js');
+      const plainTextSourceCodeFilePath = path.join(outputFolder, 'plain-text.json');
+      fs.writeFileSync(indexFilePath, indexFileContent);
+      fs.writeFileSync(plainTextSourceCodeFilePath, JSON.stringify(plainTextSourceCode, null, 2));
+      console.log(`Barrel file (index.js) created in: ${indexFilePath}`);
     });
   });
 
