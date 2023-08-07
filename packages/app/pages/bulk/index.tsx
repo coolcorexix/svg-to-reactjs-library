@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import * as iconComponents from '../../svg2jsx-icons';
 import plainTextSourceCode from '../../svg2jsx-icons/plain-text.json';
 import Editor from '../../components/Editor';
@@ -16,7 +16,7 @@ function BulkPage() {
     setSelectedIcon({ iconName, IconComponent });
   };
 
-  const iconStyle = {
+  const iconStyle: CSSProperties = {
     display: 'flex',
     cursor: 'pointer',
     flexDirection: 'column',
@@ -27,12 +27,12 @@ function BulkPage() {
     borderRadius: '5px',
   };
 
-  const nameStyle = {
+  const nameStyle: CSSProperties = {
     marginTop: '8px', // Divisible by 4
     textAlign: 'center',
   };
 
-  const panelStyle = {
+  const panelStyle: CSSProperties = {
     padding: '16px', // Divisible by 4
     border: '1px solid #ccc',
     borderRadius: '5px',
@@ -57,7 +57,7 @@ function BulkPage() {
         {selectedIcon && (
           <>
             <h2>{selectedIcon.iconName}</h2>
-            {(typeof window !== 'undefined') && (
+            {typeof window !== 'undefined' && (
               <Editor value={plainTextSourceCode[selectedIcon.iconName]} mode="jsx" isReadOnly />
             )}
           </>
