@@ -1,7 +1,12 @@
 import React, { CSSProperties, useState } from 'react';
 import * as iconComponents from '../../svg2jsx-icons';
-// import plainTextSourceCode from '../../svg2jsx-icons/plain-text.json';
-// import Editor from '../../components/Editor';
+import plainTextSourceCode from '../../svg2jsx-icons/plain-text.json';
+
+import dynamic from 'next/dynamic';
+
+const Editor = dynamic(() => import('../../components/Editor'), {
+  ssr: false, // This will only import the library on the client side
+});
 
 function BulkPage() {
   const [selectedIcon, setSelectedIcon] = useState(null);
@@ -57,9 +62,8 @@ function BulkPage() {
         {selectedIcon && (
           <>
             <h2>{selectedIcon.iconName}</h2>
-            {/* {typeof window !== 'undefined' && (
-              <Editor value={plainTextSourceCode[selectedIcon.iconName]} mode="jsx" isReadOnly />
-            )} */}
+
+            <Editor value={plainTextSourceCode[selectedIcon.iconName]} mode="jsx" isReadOnly onChange={() => {}} />
           </>
         )}
       </div>
