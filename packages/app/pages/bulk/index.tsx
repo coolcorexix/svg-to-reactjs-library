@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as iconComponents from '../../svg2jsx-icons';
-import plainTextSourceCode from '../../svg2jsx-icons/plain-text.json'
+import plainTextSourceCode from '../../svg2jsx-icons/plain-text.json';
 import Editor from '../../components/Editor';
 
 function BulkPage() {
@@ -10,13 +10,11 @@ function BulkPage() {
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
     gap: '16px', // Divisible by 4
     padding: '16px', // Divisible by 4
-
   };
 
   const handleIconClick = (iconName, IconComponent) => {
-    setSelectedIcon({iconName, IconComponent});
+    setSelectedIcon({ iconName, IconComponent });
   };
-
 
   const iconStyle = {
     display: 'flex',
@@ -59,8 +57,9 @@ function BulkPage() {
         {selectedIcon && (
           <>
             <h2>{selectedIcon.iconName}</h2>
-
-            <Editor value={plainTextSourceCode[selectedIcon.iconName]} mode="jsx" isReadOnly /> 
+            {(typeof window !== 'undefined') && (
+              <Editor value={plainTextSourceCode[selectedIcon.iconName]} mode="jsx" isReadOnly />
+            )}
           </>
         )}
       </div>

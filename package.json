@@ -7,9 +7,6 @@
   "repository": "https://github.com/balajmarius/svg2jsx-gui.git",
   "author": "Balaj Marius <balajmarius@gmail.com>",
   "license": "MIT",
-  "engines": {
-    "node": "12.20.1"
-  },
   "workspaces": [
     "packages/app",
     "packages/transform",
