@@ -6,7 +6,7 @@
   "module": "dist/esm/packages/icons-library/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c"
+    "build": "rimraf dist && rollup -c"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "@rollup/plugin-inject": "^5.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-terser": "0.4.3",
+    "rimraf": "^5.0.1",
     "rollup": "^3.28.1",
     "rollup-plugin-typescript2": "^0.35.0"
   }
