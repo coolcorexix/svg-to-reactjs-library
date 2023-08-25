@@ -28,8 +28,6 @@ const hexColorRegex = /^#([0-9a-fA-F]{3}){1,2}$/;
 
 function outmostTransform(node) {
   const transformedNode = transform(node);
-  console.log('in the outmost: ', transformedNode.defaultFillColor);
-  // console.log('in the outmost 2: ', transformedNode.defaultFillColor);
   return transformedNode;
 }
 

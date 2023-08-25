@@ -1,0 +1,36 @@
+{
+  "name": "@svg2tsx/library",
+  "version": "1.0.0",
+  "description": "Description of your library",
+  "main": "dist/library.cjs.js",
+  "module": "dist/esm/packages/icons-library/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/your-repo"
+  },
+  "keywords": [
+    "your",
+    "keywords",
+    "here"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-react": "^7.22.5",
+    "@rollup/plugin-alias": "^3.0.0",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^22.0.1",
+    "@rollup/plugin-inject": "^5.0.3",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-terser": "0.4.3",
+    "rollup": "^3.28.1",
+    "rollup-plugin-typescript2": "^0.35.0"
+  }
+}

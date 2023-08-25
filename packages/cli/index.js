@@ -1,9 +1,23 @@
 const path = require('path');
 const fs = require('fs');
 const transform = require('@svg2jsx/transform');
+const chalk = require('chalk');
 const { cac } = require('cac');
 
 const cli = cac('svg2jsx');
+
+function logMessage(message, type = 'info') {
+  const logStyles = {
+    info: chalk.blue,
+    error: chalk.red,
+    success: chalk.green,
+    warning: chalk.orange,
+  };
+
+  const style = logStyles[type] || chalk.white.bold;
+
+  console.log(style(message));
+}
 
 function toTitleCase(str) {
   return str.replace(/\b\w/g, (match) => match.toUpperCase()).replace(/[-\s]/g, '');
@@ -14,9 +28,8 @@ cli
   .option('--outDir <outputFolder>', 'Specify the output folder path')
   .action(async (folderPath, options) => {
     folderPath = path.resolve(folderPath);
-    console.log(`Listing all SVG files in folder: ${folderPath}`);
 
-    const outputFolder = options.output ? path.resolve(options.output) : path.join(process.cwd(), 'svg2jsx-icons');
+    const outputFolder = options.outDir ? path.resolve(options.outDir) : path.join(process.cwd(), 'svg2jsx-icons');
 
     if (!fs.existsSync(outputFolder)) {
       fs.mkdirSync(outputFolder, { recursive: true });
@@ -24,19 +37,17 @@ cli
 
     fs.readdir(folderPath, async (err, files) => {
       if (err) {
-        console.error('Error occurred while reading the folder:', err);
+        logMessage('Error occurred while reading the folder:' + err, 'error');
         return;
       }
 
       const svgFileNames = files.filter((file) => path.extname(file) === '.svg');
 
       if (svgFileNames.length === 0) {
-        console.log('No SVG files found in the folder.');
+        logMessage('No SVG files found in the folder.', 'error');
         return;
       }
-
-      console.log('Found SVG files:');
-      const plainTextSourceCode = {};
+      
       const iconComponents = [];
       for (const fileName of svgFileNames) {
         const svgContent = fs.readFileSync(path.join(folderPath, fileName), 'utf8');
@@ -46,9 +57,7 @@ cli
 
         const outputFileName = path.join(outputFolder, `${titleCaseFileName}.jsx`);
         fs.writeFileSync(outputFileName, jsx);
-        console.log(`Converted and saved to: ${outputFileName}`);
-
-        plainTextSourceCode[titleCaseFileName] = jsx;
+        logMessage(`Converted and saved to: ${outputFileName}`, 'info');
 
         // Store the icon component name in the barrel file
         iconComponents.push(titleCaseFileName);
@@ -60,10 +69,8 @@ cli
         .join('\n');
 
       const indexFilePath = path.join(outputFolder, 'index.js');
-      const plainTextSourceCodeFilePath = path.join(outputFolder, 'plain-text.json');
       fs.writeFileSync(indexFilePath, indexFileContent);
-      fs.writeFileSync(plainTextSourceCodeFilePath, JSON.stringify(plainTextSourceCode, null, 2));
-      console.log(`Barrel file (index.js) created in: ${indexFilePath}`);
+      logMessage(`Barrel file (index.js) created in: ${indexFilePath}`, 'success');
     });
   });
 

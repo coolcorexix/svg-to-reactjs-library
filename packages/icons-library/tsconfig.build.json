@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "noImplicitAny": false,
+      "useDefineForClassFields": true,
+      "lib": ["DOM", "DOM.Iterable", "ESNext"],
+      "allowJs": true,
+      "skipLibCheck": true,
+      "esModuleInterop": false,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "strictNullChecks": false,
+      "forceConsistentCasingInFileNames": true,
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "jsx": "react",
+      "declaration": true,
+      "declarationDir": "./dist/esm/src"
+    },
+    "include": ["src"],
+    "exclude": [
+      "node_modules"
+    ]
+  }
