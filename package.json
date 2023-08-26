@@ -21,8 +21,8 @@
     "build": "next build packages/app",
     "start": "next start packages/app",
     "deploy": "vercel --target production",
-    "get-jsx": "node packages/cli/index.js convert-svg-bulk ./svg-icons --outDir icons-library/src",
-    "build-library": "yarn work"
+    "build-library": "yarn workspace @svg2tsx/library run build",
+    "get-jsx": "node packages/cli/index.js convert-svg-bulk ./svg-icons --outDir packages/icons-library/src && yarn run build-library"
   },
   "devDependencies": {
     "@types/node": "14.14.28",
